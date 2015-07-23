@@ -16,9 +16,6 @@ pub struct Game {
 }
 
 impl Game {
-    // A window must have been constructed before we initialise the
-    // GlGraphics object, so we pass in an unused window parameter
-    // to ensure this invariant is upheld
     pub fn new(opengl: OpenGL, win: GlutinWindow) -> Game {
         Game {
             gl: GlGraphics::new(opengl),
