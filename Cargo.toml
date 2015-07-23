@@ -1,0 +1,14 @@
+[package]
+name = "calaxite"
+version = "0.1.0"
+authors = ["George Burton <burtonageo@gmail.com>"]
+
+[dependencies]
+piston = "*"
+piston2d-graphics = "*"
+pistoncore-glutin_window = "*"
+piston2d-opengl_graphics = "*"
+nalgebra = "*"
+
+[dependencies.simplecolor]
+git = "https://github.com/burtonageo/simplecolor"
