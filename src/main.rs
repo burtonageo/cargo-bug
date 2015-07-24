@@ -8,6 +8,7 @@ extern crate simplecolor as sc;
 extern crate nalgebra as na;
 
 mod game;
+mod screens;
 mod world;
 
 use piston::window::WindowSettings;
