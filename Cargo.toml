@@ -3,12 +3,24 @@ name = "calaxite"
 version = "0.1.0"
 authors = ["George Burton <burtonageo@gmail.com>"]
 
+[profile.dev]
+opt-level = 1
+debug = true
+rpath = false
+lto = false
+debug-assertions = true
+
+[profile.release]
+opt-level = 3
+debug = false
+rpath = false
+lto = true
+debug-assertions = false
+
 [dependencies]
 piston = "*"
 piston2d-graphics = "*"
 pistoncore-glutin_window = "*"
 piston2d-opengl_graphics = "*"
 nalgebra = "*"
-
-[dependencies.simplecolor]
-git = "https://github.com/burtonageo/simplecolor"
+simplecolor = {git = "https://github.com/burtonageo/simplecolor"}
