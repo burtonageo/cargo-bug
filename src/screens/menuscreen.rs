@@ -20,7 +20,8 @@ impl GameInput for MenuScreen {
 }
 
 impl Render for MenuScreen {
-    fn render(&mut self, _args: &RenderArgs, _gl: &mut GlGraphics) {
+    fn render(&mut self, args: &RenderArgs, gl: &mut GlGraphics) {
+        use graphics::clear;
+        gl.draw(args.viewport(), |_, gl| { clear([0.0, 0.0, 1.0, 1.0], gl); });
     }
 }
-
