@@ -6,7 +6,7 @@ use game::{Update, GameInput, Render};
 pub struct MenuScreen;
 
 impl GameScreen for MenuScreen {
-    fn new() -> Box<Self> where Self: Sized + GameScreen {Box::new(MenuScreen)}
+    fn new() -> Self where Self: Sized + GameScreen {MenuScreen}
 }
 
 impl Update for MenuScreen {

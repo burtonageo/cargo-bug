@@ -12,14 +12,14 @@ pub struct OverworldScreen {
 }
 
 impl GameScreen for OverworldScreen {
-    fn new() -> Box<Self> where Self: Sized + GameScreen {
-        Box::new(OverworldScreen {
+    fn new() -> Self where Self: Sized + GameScreen {
+        OverworldScreen {
             bg_color: Rgba::with_components(0.0, 1.0, 0.0, 1.0),
             hero: Hero::new(
                 Rgba::with_components(1.0, 0.0, 0.0, 1.0),
                 Pnt2::new(0.0, 0.0),
                 50.0),
-        })
+        }
     }
 }
 
