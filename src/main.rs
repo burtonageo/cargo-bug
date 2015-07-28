@@ -9,7 +9,6 @@ extern crate nalgebra as na;
 
 mod game;
 mod screens;
-mod world;
 
 use piston::window::WindowSettings;
 use opengl_graphics::OpenGL;
