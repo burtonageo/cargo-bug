@@ -1,4 +1,4 @@
-//#![feature(const_fn)]
+#![feature(const_fn)]
 
 extern crate piston;
 extern crate graphics;

@@ -87,12 +87,13 @@ impl Entity for Hero {
                       clamp(vel[1], max[1].neg(), max[1]))
         }
 
-        self.topleft = clamp_velocity(&(self.curr_velocity * args.dt), &self.max_velocity)
-            .translate(&self.topleft);
+        self.topleft = clamp_velocity(&(self.curr_velocity * args.dt),
+                                      &self.max_velocity)
+                           .translate(&self.topleft);
     }
 
     fn input(&mut self, iput: &Input) {
-        use piston::input::{Input, Button};
+        use piston::input::Button;
         use piston::input::keyboard::Key;
 
         match iput {

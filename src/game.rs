@@ -4,12 +4,25 @@ use piston::input::{Event, Input, RenderArgs, RenderEvent, UpdateArgs, UpdateEve
 use piston::event_loop::{EventMap, Events};
 use std::cell::RefCell;
 use std::rc::Rc;
+use screens::GameScreens;
 use world::World;
 
 pub struct Game {
     gl: GlGraphics,
     window: Rc<RefCell<GlutinWindow>>,
     world: World
+}
+
+pub trait Update {
+    fn update(&mut self, _: &UpdateArgs);
+}
+
+pub trait GameInput {
+    fn input(&mut self, _: &Input);
+}
+
+pub trait Render {
+    fn render(&mut self, _: &mut GlGraphics, _: &RenderArgs);
 }
 
 impl Game {
@@ -38,15 +51,21 @@ impl Game {
         }
     }
 
+    // Different signature because Game owns the GlGraphics
     fn render(&mut self, args: &RenderArgs) {
         self.world.render(&mut self.gl, args);
     }
+}
 
+impl Update for Game {
     fn update(&mut self, args: &UpdateArgs) {
         self.world.update(args);
     }
+}
 
+impl GameInput for Game {
     fn input(&mut self, args: &Input) {
         self.world.input(&args)
     }
 }
+
