@@ -18,9 +18,9 @@ lto = true
 debug-assertions = false
 
 [dependencies]
-piston = "*"
-piston2d-graphics = "*"
-pistoncore-glutin_window = "*"
-piston2d-opengl_graphics = "*"
-nalgebra = "*"
+piston = "0.5.0"
+piston2d-graphics = "0.4.1"
+piston2d-opengl_graphics = "0.6.0"
+pistoncore-glutin_window = "0.7.1"
+nalgebra = "0.2.20"
 simplecolor = {git = "https://github.com/burtonageo/simplecolor"}
