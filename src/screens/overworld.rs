@@ -1,14 +1,12 @@
 use opengl_graphics::GlGraphics;
 use piston::input::{Input, RenderArgs, UpdateArgs};
-use screens::{GameScreen, ScreenType};
+use screens::GameScreen;
 use game::{GameInput, Update, Render};
 
 pub struct OverworldScreen;
 
 impl GameScreen for OverworldScreen {
     fn new() -> Box<Self> where Self: Sized + GameScreen {Box::new(OverworldScreen)}
-
-    fn get_type(&self) -> ScreenType { ScreenType::Overworld }
 }
 
 impl Update for OverworldScreen {

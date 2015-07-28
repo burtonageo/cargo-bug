@@ -1,14 +1,12 @@
 use opengl_graphics::GlGraphics;
 use piston::input::{Input, RenderArgs, UpdateArgs};
-use screens::{GameScreen, ScreenType};
+use screens::GameScreen;
 use game::{Update, GameInput, Render};
 
 pub struct MenuScreen;
 
 impl GameScreen for MenuScreen {
     fn new() -> Box<Self> where Self: Sized + GameScreen {Box::new(MenuScreen)}
-
-    fn get_type(&self) -> ScreenType { ScreenType::Menu }
 }
 
 impl Update for MenuScreen {
