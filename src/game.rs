@@ -22,7 +22,7 @@ pub trait GameInput {
 }
 
 pub trait Render {
-    fn render(&mut self, _: &mut GlGraphics, _: &RenderArgs);
+    fn render(&mut self, _: &RenderArgs, _: &mut GlGraphics);
 }
 
 impl Game {

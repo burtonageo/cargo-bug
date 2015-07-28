@@ -22,6 +22,6 @@ impl GameInput for OverworldScreen {
 }
 
 impl Render for OverworldScreen {
-    fn render(&mut self, _gl: &mut GlGraphics, _args: &RenderArgs) {
+    fn render(&mut self, _args: &RenderArgs, _gl: &mut GlGraphics) {
     }
 }

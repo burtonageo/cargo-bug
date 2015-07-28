@@ -69,7 +69,7 @@ impl Update for GameScreens {
 }
 
 impl Render for GameScreens {
-    fn render(&mut self, gl: &mut GlGraphics, args: &RenderArgs) {
-        self.screens[self.active_screen as usize].as_mut().map(|s| s.render(gl, args));
+    fn render(&mut self, args: &RenderArgs, gl: &mut GlGraphics) {
+        self.screens[self.active_screen as usize].as_mut().map(|s| s.render(args, gl));
     }
 }

@@ -22,7 +22,7 @@ impl GameInput for MenuScreen {
 }
 
 impl Render for MenuScreen {
-    fn render(&mut self, _gl: &mut GlGraphics, _args: &RenderArgs) {
+    fn render(&mut self, _args: &RenderArgs, _gl: &mut GlGraphics) {
     }
 }
 
