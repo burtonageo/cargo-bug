@@ -4,12 +4,18 @@ mod menuscreen;
 mod overworld;
 
 use game::{Update, GameInput, Render};
-use self::menuscreen::MenuScreen;
 use opengl_graphics::GlGraphics;
 use piston::input::{Input, RenderArgs, UpdateArgs};
+use self::menuscreen::MenuScreen;
+use std::any::Any;
 
 pub trait GameScreen: Update + GameInput + Render {
     fn new() -> Box<Self> where Self: Sized + GameScreen;
+
+    fn with_args(_: Vec<Box<Any>>) -> Option<Box<Self>> where Self: Sized + GameScreen {
+        None
+    }
+
     fn get_type(&self) -> ScreenType;
 }
 
