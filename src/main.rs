@@ -9,6 +9,7 @@ extern crate nalgebra as na;
 
 mod game;
 mod screens;
+mod keymap;
 
 use piston::window::WindowSettings;
 use opengl_graphics::OpenGL;
