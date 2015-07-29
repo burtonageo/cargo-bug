@@ -36,15 +36,9 @@ impl Game {
     pub fn run_loop(&mut self) {
         for e in self.window.clone().events() {
             match e {
-                Event::Render(r) => {
-                    self.render(&r);
-                },
-                Event::Update(u) => {
-                    self.update(&u);
-                },
-                Event::Input(i) => {
-                    self.input(&i);
-                },
+                Event::Render(r) => { self.render(&r); },
+                Event::Update(u) => { self.update(&u); },
+                Event::Input(i)  => { self.input(&i); },
                 _ => { }
             }
         }
