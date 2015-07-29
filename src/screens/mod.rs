@@ -31,37 +31,37 @@ macro_rules! enum_map(
     ($nm:ident : $idx_ty:ty => $key_ty:ty {
         $($idx:expr => $brnch:ident($inner_ty:ident)),*
     }) => (
-        pub enum $nm {
+        enum $nm {
             $($brnch($inner_ty)),*
         }
 
         impl $nm {
-            pub fn get_current_branch_index(&self) -> $idx_ty {
+            fn get_current_branch_index(&self) -> $idx_ty {
                 match self {
                     $(&$nm::$brnch(_) => $idx),*
                 }
             }
 
-            pub fn get_current_branch(&self) -> &$key_ty {
+            fn get_current_branch(&self) -> &$key_ty {
                 match self {
                     $(&$nm::$brnch(ref inner) => &*inner as &$key_ty),*
                 }
             }
 
-            pub fn get_current_branch_mut(&mut self) -> &mut $key_ty {
+            fn get_current_branch_mut(&mut self) -> &mut $key_ty {
                 match self {
                     $(&mut $nm::$brnch(ref mut inner) => &mut *inner as &mut $key_ty),*
                 }
             }
 
-            pub fn set_branch_with_args(&mut self, index: &$idx_ty, args: Vec<Box<Any>>) {
+            fn set_branch_with_args(&mut self, index: &$idx_ty, args: Vec<Box<Any>>) {
                 match index {
                     $(&$idx => *self = $nm::$brnch($inner_ty::with_args(args).unwrap())),*
                     , _ => { }
                 }
             }
 
-            pub fn set_branch(&mut self, index: &$idx_ty) {
+            fn set_branch(&mut self, index: &$idx_ty) {
                 match index {
                     $(&$idx => *self = $nm::$brnch($inner_ty::new())),*
                     , _ => { }
@@ -71,14 +71,38 @@ macro_rules! enum_map(
     );
 );
 
-enum_map!( GameScreens: usize => GameScreen {
+enum_map!( GameScreensInner: usize => GameScreen {
     (MENU_SCREEN_KEY = 0) => MainMenu(MenuScreen),
     (OVERWORLD_SCREEN_KEY = 1) => Overworld(OverworldScreen)
 });
 
+pub struct GameScreens {
+    inner: GameScreensInner
+}
+
 impl GameScreens {
     pub fn new() -> GameScreens {
-        GameScreens::MainMenu(MenuScreen::new())
+        GameScreens { inner: GameScreensInner::MainMenu(MenuScreen::new()) }
+    }
+
+    pub fn get_current_screen_index(&self) -> usize {
+        self.inner.get_current_branch_index()
+    }
+
+    pub fn get_current_screen(&self) -> &GameScreen {
+        self.inner.get_current_branch()
+    }
+
+    pub fn get_current_screen_mut(&mut self) -> &mut GameScreen {
+        self.inner.get_current_branch_mut()
+    }
+
+    pub fn set_screen(&mut self, index: usize) {
+        self.inner.set_branch(&index);
+    }
+
+    pub fn set_screen_with_args(&mut self, index: usize, args: Vec<Box<Any>>) {
+        self.inner.set_branch_with_args(&index, args);
     }
 }
 
@@ -87,26 +111,26 @@ impl GameInput for GameScreens {
         use piston::input::Button;
         use piston::input::keyboard::Key;
 
-        self.get_current_branch_mut().input(iput);
+        self.get_current_screen_mut().input(iput);
         if let &Input::Press(Button::Keyboard(Key::Space)) = iput {
-            let other_branch = match self.get_current_branch_index() {
+            let other_branch = match self.get_current_screen_index() {
                                    MENU_SCREEN_KEY => OVERWORLD_SCREEN_KEY,
                                    OVERWORLD_SCREEN_KEY => MENU_SCREEN_KEY,
                                    _ => 0
                                };
-            self.set_branch(&other_branch);
+            self.set_screen(other_branch);
         }
     }
 }
 
 impl Update for GameScreens {
     fn update(&mut self, args: &UpdateArgs) {
-        self.get_current_branch_mut().update(args);
+        self.get_current_screen_mut().update(args);
     }
 }
 
 impl Render for GameScreens {
     fn render(&mut self, args: &RenderArgs, gl: &mut GlGraphics) {
-        self.get_current_branch_mut().render(args, gl);
+        self.get_current_screen_mut().render(args, gl);
     }
 }
