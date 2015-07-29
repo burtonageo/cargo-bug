@@ -36,7 +36,7 @@ macro_rules! enum_map(
         }
 
         impl $nm {
-            pub fn get_current_branch_idx(&self) -> $idx_ty {
+            pub fn get_current_branch_index(&self) -> $idx_ty {
                 match self {
                     $(&$nm::$brnch(_) => $idx),*
                 }
@@ -89,7 +89,7 @@ impl GameInput for GameScreens {
 
         self.get_current_branch_mut().input(iput);
         if let &Input::Press(Button::Keyboard(Key::Space)) = iput {
-            let other_branch = match self.get_current_branch_idx() {
+            let other_branch = match self.get_current_branch_index() {
                                    MENU_SCREEN_KEY => OVERWORLD_SCREEN_KEY,
                                    OVERWORLD_SCREEN_KEY => MENU_SCREEN_KEY,
                                    _ => 0
