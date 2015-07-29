@@ -67,4 +67,3 @@ impl GameInput for Game {
         self.screens.input(&args)
     }
 }
-
