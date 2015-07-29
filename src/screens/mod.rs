@@ -35,7 +35,6 @@ macro_rules! enum_map(
             $($brnch($inner_ty)),*
         }
 
-        #[allow(dead_code)]
         impl $nm {
             pub fn get_current_branch_idx(&self) -> $idx_ty {
                 match self {
@@ -91,10 +90,10 @@ impl GameInput for GameScreens {
         self.get_current_branch_mut().input(iput);
         if let &Input::Press(Button::Keyboard(Key::Space)) = iput {
             let other_branch = match self.get_current_branch_idx() {
-                MENU_SCREEN_KEY => OVERWORLD_SCREEN_KEY,
-                OVERWORLD_SCREEN_KEY => MENU_SCREEN_KEY,
-                _ => 0
-            };
+                                   MENU_SCREEN_KEY => OVERWORLD_SCREEN_KEY,
+                                   OVERWORLD_SCREEN_KEY => MENU_SCREEN_KEY,
+                                   _ => 0
+                               };
             self.set_branch(&other_branch);
         }
     }
