@@ -1,5 +1,3 @@
-#![allow(dead_code)]
-
 mod menuscreen;
 mod overworld;
 
@@ -35,6 +33,7 @@ macro_rules! enum_map(
             $($brnch($inner_ty)),*
         }
 
+        #[allow(dead_code)]
         impl $nm {
             fn get_current_branch_index(&self) -> $idx_ty {
                 match self {
@@ -89,6 +88,7 @@ impl GameScreens {
         self.inner.get_current_branch_index()
     }
 
+    #[allow(dead_code)]
     pub fn get_current_screen(&self) -> &GameScreen {
         self.inner.get_current_branch()
     }
@@ -101,6 +101,7 @@ impl GameScreens {
         self.inner.set_branch(&index);
     }
 
+    #[allow(dead_code)]
     pub fn set_screen_with_args(&mut self, index: usize, args: Vec<Box<Any>>) {
         self.inner.set_branch_with_args(&index, args);
     }
