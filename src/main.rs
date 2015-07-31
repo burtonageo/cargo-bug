@@ -21,9 +21,9 @@ fn main() {
     const OPENGL: OpenGL = OpenGL::V3_2;
 
     let window = WindowSettings::new("calaxite", (800, 600))
-                     .opengl(OPENGL)
-                     .fullscreen(false)
                      .exit_on_esc(true)
+                     .fullscreen(false)
+                     .opengl(OPENGL)
                      .vsync(true)
                      .into();
 
