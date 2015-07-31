@@ -24,6 +24,7 @@ fn main() {
                      .opengl(OPENGL)
                      .fullscreen(false)
                      .exit_on_esc(true)
+                     .vsync(true)
                      .into();
 
     let mut game = Game::new(OPENGL, window);
