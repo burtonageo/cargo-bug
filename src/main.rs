@@ -6,6 +6,7 @@ extern crate glutin_window;
 extern crate opengl_graphics;
 extern crate simplecolor as sc;
 extern crate nalgebra as na;
+extern crate viewport;
 
 mod game;
 mod screens;

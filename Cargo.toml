@@ -18,9 +18,10 @@ lto = true
 debug-assertions = false
 
 [dependencies]
+nalgebra = "0.2.20"
 piston = "0.5.0"
 piston2d-graphics = "0.4.1"
 piston2d-opengl_graphics = "0.6.0"
 pistoncore-glutin_window = "0.7.1"
-nalgebra = "0.2.20"
+piston-viewport = "0.1.0"
 simplecolor = {git = "https://github.com/burtonageo/simplecolor"}
