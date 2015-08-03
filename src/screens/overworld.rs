@@ -7,7 +7,7 @@ use piston::input::{Input, RenderArgs, UpdateArgs};
 use screens::GameScreen;
 use sc::Rgba;
 use game::{GameInput, Update, Render};
-use keymap::{Action, InputMap};
+use input_map::{Action, InputMap};
 use piston::window::Size;
 
 pub struct OverworldScreen {

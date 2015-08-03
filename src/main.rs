@@ -10,7 +10,7 @@ extern crate viewport;
 
 mod game;
 mod screens;
-mod keymap;
+mod input_map;
 
 use piston::window::WindowSettings;
 use opengl_graphics::OpenGL;
