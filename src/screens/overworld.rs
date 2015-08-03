@@ -4,11 +4,11 @@ use na;
 use na::{Translate, Pnt2, Vec2};
 use opengl_graphics::GlGraphics;
 use piston::input::{Input, RenderArgs, UpdateArgs};
+use piston::window::Window;
 use screens::GameScreen;
 use sc::Rgba;
-use game::{GameInput, Update, Render};
+use game::{Update, GameInput, RcWindow, Render};
 use input_map::{Action, InputMap};
-use piston::window::Size;
 
 pub struct OverworldScreen {
     hero: Hero,
@@ -17,10 +17,10 @@ pub struct OverworldScreen {
 }
 
 impl GameScreen for OverworldScreen {
-    fn new() -> Self where Self: Sized + GameScreen {
+    fn new(window: RcWindow) -> Self where Self: Sized + GameScreen {
         OverworldScreen {
             bg_color: Rgba::with_components(0.0, 1.0, 0.0, 1.0),
-            hero_inmap: InputMap::new(Size {width: 800, height: 600}),
+            hero_inmap: InputMap::new(window.borrow().draw_size()),
             hero: Hero::new(
                 Rgba::with_components(1.0, 0.0, 0.0, 1.0),
                 Pnt2::new(0.0, 0.0),
@@ -30,9 +30,8 @@ impl GameScreen for OverworldScreen {
 }
 
 impl Update for OverworldScreen {
-    fn update(&mut self, args: &UpdateArgs) {
-    self.hero.update(args);
-    
+    fn update(&mut self, args: &UpdateArgs, window: RcWindow) {
+        self.hero.update(args, window);
     }
 }
 
@@ -104,7 +103,7 @@ impl Render for Hero {
 }
 
 impl Update for Hero {
-    fn update(&mut self, args: &UpdateArgs) {
+    fn update(&mut self, args: &UpdateArgs, _: RcWindow) {
         use std::ops::Neg;
         fn clamp_velocity<F: PartialOrd + na::BaseFloat + Neg>(vel: &Vec2<F>, max: &Vec2<F>) -> Vec2<F> {
             use na::clamp;

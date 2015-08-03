@@ -1,7 +1,7 @@
 mod menuscreen;
 mod overworld;
 
-use game::{Update, GameInput, Render};
+use game::{Update, GameInput, RcWindow, Render};
 use opengl_graphics::GlGraphics;
 use piston::input::{Input, RenderArgs, UpdateArgs};
 use self::menuscreen::MenuScreen;
@@ -9,7 +9,7 @@ use self::overworld::OverworldScreen;
 use std::any::Any;
 
 pub trait GameScreen: Update + GameInput + Render {
-    fn new() -> Self where Self: Sized + GameScreen;
+    fn new(_: RcWindow) -> Self where Self: Sized + GameScreen;
 
     fn with_args(_: Vec<Box<Any>>) -> Option<Self> where Self: Sized + GameScreen {
         None
@@ -60,9 +60,9 @@ macro_rules! enum_map(
                 }
             }
 
-            fn set_branch(&mut self, index: &$idx_ty) {
+            fn set_branch(&mut self, index: &$idx_ty, window: RcWindow) {
                 match index {
-                    $(&$idx => *self = $nm::$brnch($inner_ty::new())),*
+                    $(&$idx => *self = $nm::$brnch($inner_ty::new(window))),*
                     , _ => { }
                 }
             }
@@ -76,12 +76,16 @@ enum_map!( GameScreensInner: usize => GameScreen {
 });
 
 pub struct GameScreens {
-    inner: GameScreensInner
+    inner: GameScreensInner,
+    next_screen_idx: usize
 }
 
 impl GameScreens {
-    pub fn new() -> GameScreens {
-        GameScreens { inner: GameScreensInner::MainMenu(MenuScreen::new()) }
+    pub fn new(win: RcWindow) -> GameScreens {
+        GameScreens {
+            inner: GameScreensInner::MainMenu(MenuScreen::new(win)),
+            next_screen_idx: 0
+        }
     }
 
     pub fn get_current_screen_index(&self) -> usize {
@@ -97,8 +101,8 @@ impl GameScreens {
         self.inner.get_current_branch_mut()
     }
 
-    pub fn set_screen(&mut self, index: usize) {
-        self.inner.set_branch(&index);
+    pub fn set_screen(&mut self, index: usize, window: RcWindow) {
+        self.inner.set_branch(&index, window.clone());
     }
 
     #[allow(dead_code)]
@@ -114,19 +118,22 @@ impl GameInput for GameScreens {
 
         self.get_current_screen_mut().input(iput);
         if let &Input::Press(Button::Keyboard(Key::Space)) = iput {
-            let other_branch = match self.get_current_screen_index() {
-                                   MENU_SCREEN_KEY => OVERWORLD_SCREEN_KEY,
-                                   OVERWORLD_SCREEN_KEY => MENU_SCREEN_KEY,
-                                   _ => 0
-                               };
-            self.set_screen(other_branch);
+            self.next_screen_idx = match self.get_current_screen_index() {
+                                       MENU_SCREEN_KEY => OVERWORLD_SCREEN_KEY,
+                                       OVERWORLD_SCREEN_KEY => MENU_SCREEN_KEY,
+                                       _ => 0
+                                   };
         }
     }
 }
 
 impl Update for GameScreens {
-    fn update(&mut self, args: &UpdateArgs) {
-        self.get_current_screen_mut().update(args);
+    fn update(&mut self, args: &UpdateArgs, window: RcWindow) {
+        self.get_current_screen_mut().update(args, window.clone());
+        let next_screen_idx = self.next_screen_idx;
+        if next_screen_idx != self.get_current_screen_index() {
+            self.set_screen(next_screen_idx, window.clone());
+        }
     }
 }
 

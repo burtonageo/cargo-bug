@@ -1,16 +1,16 @@
 use opengl_graphics::GlGraphics;
 use piston::input::{Input, RenderArgs, UpdateArgs};
 use screens::GameScreen;
-use game::{Update, GameInput, Render};
+use game::{Update, GameInput, RcWindow, Render};
 
 pub struct MenuScreen;
 
 impl GameScreen for MenuScreen {
-    fn new() -> Self where Self: Sized + GameScreen {MenuScreen}
+    fn new(_: RcWindow) -> Self where Self: Sized + GameScreen {MenuScreen}
 }
 
 impl Update for MenuScreen {
-    fn update(&mut self, _args: &UpdateArgs) {
+    fn update(&mut self, _args: &UpdateArgs, _: RcWindow) {
     }
 }
 

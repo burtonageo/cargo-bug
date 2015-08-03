@@ -6,14 +6,16 @@ use std::cell::RefCell;
 use std::rc::Rc;
 use screens::GameScreens;
 
+pub type RcWindow = Rc<RefCell<GlutinWindow>>;
+
 pub struct Game {
-    gl: GlGraphics,
-    window: Rc<RefCell<GlutinWindow>>,
-    screens: GameScreens
+    screens: GameScreens,
+    window: RcWindow,
+    gl: GlGraphics
 }
 
 pub trait Update {
-    fn update(&mut self, _: &UpdateArgs);
+    fn update(&mut self, _: &UpdateArgs, _: RcWindow);
 }
 
 pub trait GameInput {
@@ -25,11 +27,12 @@ pub trait Render {
 }
 
 impl Game {
-    pub fn new(opengl: OpenGL, win: GlutinWindow) -> Game {
+    pub fn new(opengl: OpenGL, window: GlutinWindow) -> Game {
+        let window = Rc::new(RefCell::new(window));
         Game {
-            gl: GlGraphics::new(opengl),
-            window: Rc::new(RefCell::new(win)),
-            screens: GameScreens::new()
+            screens: GameScreens::new(window.clone()),
+            window: window,
+            gl: GlGraphics::new(opengl)
         }
     }
 
@@ -48,16 +51,12 @@ impl Game {
     fn render(&mut self, args: &RenderArgs) {
         self.screens.render(args, &mut self.gl);
     }
-}
 
-impl Update for Game {
-    fn update(&mut self, args: &UpdateArgs) {
-        self.screens.update(args);
-    }
-}
-
-impl GameInput for Game {
     fn input(&mut self, args: &Input) {
         self.screens.input(&args)
+    }
+
+    fn update(&mut self, args: &UpdateArgs) {
+        self.screens.update(args, self.window.clone());
     }
 }
