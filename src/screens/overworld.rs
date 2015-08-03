@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use na;
 use na::{Translate, Pnt2, Vec2};
 use opengl_graphics::GlGraphics;
@@ -5,9 +7,12 @@ use piston::input::{Input, RenderArgs, UpdateArgs};
 use screens::GameScreen;
 use sc::Rgba;
 use game::{GameInput, Update, Render};
+use keymap::{Action, InputMap};
+use piston::window::Size;
 
 pub struct OverworldScreen {
     hero: Hero,
+    hero_inmap: InputMap<HeroAction>,
     bg_color: Rgba<f32>
 }
 
@@ -15,6 +20,7 @@ impl GameScreen for OverworldScreen {
     fn new() -> Self where Self: Sized + GameScreen {
         OverworldScreen {
             bg_color: Rgba::with_components(0.0, 1.0, 0.0, 1.0),
+            hero_inmap: InputMap::new(Size {width: 800, height: 600}),
             hero: Hero::new(
                 Rgba::with_components(1.0, 0.0, 0.0, 1.0),
                 Pnt2::new(0.0, 0.0),
@@ -58,6 +64,15 @@ struct Hero {
     size: f64,
     rotation: f64
 }
+
+#[derive(Clone, Copy, Eq, PartialEq)]
+enum HeroAction {
+    MoveUp,
+    MoveLeft,
+    MoveRight,
+    MoveDown
+}
+impl Action for HeroAction {}
 
 impl Hero {
     fn new(col: Rgba<f32>, tl: Pnt2<f64>, sz: f64) -> Hero {
