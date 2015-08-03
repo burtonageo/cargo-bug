@@ -1,6 +1,7 @@
 [package]
 name = "calaxite"
 version = "0.1.0"
+readme = "./Readme.md"
 authors = ["George Burton <burtonageo@gmail.com>"]
 
 [profile.dev]
