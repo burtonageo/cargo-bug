@@ -71,6 +71,7 @@ enum HeroAction {
     MoveRight,
     MoveDown
 }
+
 impl Action for HeroAction {}
 
 impl Hero {
