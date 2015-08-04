@@ -132,7 +132,7 @@ impl Update for GameScreens {
         self.get_current_screen_mut().update(args, window.clone());
         let next_screen_idx = self.next_screen_idx;
         if next_screen_idx != self.get_current_screen_index() {
-            self.set_screen(next_screen_idx, window.clone());
+            self.set_screen(next_screen_idx, window);
         }
     }
 }
