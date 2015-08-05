@@ -1,5 +1,6 @@
 #![feature(const_fn)]
 
+extern crate input_map;
 extern crate piston;
 extern crate graphics;
 extern crate glutin_window;
