@@ -3,16 +3,15 @@
 use na;
 use na::{Translate, Pnt2, Vec2};
 use opengl_graphics::GlGraphics;
-use piston::input::{Input, RenderArgs, UpdateArgs};
-use piston::window::Window;
+use piston::input::{Button, Input, RenderArgs, UpdateArgs};
+use piston::window::{Size, Window};
 use screens::GameScreen;
 use sc::Rgba;
 use game::{Update, GameInput, RcWindow, Render};
-use input_map::{Action, InputMap};
+use input_map::{Action, InputMap, Translated};
 
 pub struct OverworldScreen {
     hero: Hero,
-    hero_inmap: InputMap<HeroAction>,
     bg_color: Rgba<f32>
 }
 
@@ -20,8 +19,8 @@ impl GameScreen for OverworldScreen {
     fn new(window: RcWindow) -> Self where Self: Sized + GameScreen {
         OverworldScreen {
             bg_color: Rgba::with_components(0.0, 1.0, 0.0, 1.0),
-            hero_inmap: InputMap::new(window.borrow().draw_size()),
             hero: Hero::new(
+                window.borrow().draw_size(),
                 Rgba::with_components(1.0, 0.0, 0.0, 1.0),
                 Pnt2::new(0.0, 0.0),
                 50.0),
@@ -56,6 +55,7 @@ trait Entity: Render + Update + GameInput {
 }
 
 struct Hero {
+    input_map: InputMap<HeroAction>,
     color: Rgba<f32>,
     topleft: Pnt2<f64>,
     curr_velocity: Vec2<f64>,
@@ -75,8 +75,23 @@ enum HeroAction {
 impl Action for HeroAction {}
 
 impl Hero {
-    fn new(col: Rgba<f32>, tl: Pnt2<f64>, sz: f64) -> Hero {
+    fn new(win_size: Size, col: Rgba<f32>, tl: Pnt2<f64>, sz: f64) -> Hero {
+        use piston::input::keyboard::Key;
+        let mut input_map = InputMap::new(win_size);
+        input_map.add_binding(Button::Keyboard(Key::Up), HeroAction::MoveUp);
+        input_map.add_binding(Button::Keyboard(Key::W),  HeroAction::MoveUp);
+
+        input_map.add_binding(Button::Keyboard(Key::Down), HeroAction::MoveDown);
+        input_map.add_binding(Button::Keyboard(Key::S),    HeroAction::MoveDown);
+
+        input_map.add_binding(Button::Keyboard(Key::Left), HeroAction::MoveLeft);
+        input_map.add_binding(Button::Keyboard(Key::A),    HeroAction::MoveLeft);
+
+        input_map.add_binding(Button::Keyboard(Key::Right), HeroAction::MoveRight);
+        input_map.add_binding(Button::Keyboard(Key::D),     HeroAction::MoveRight);
+
         Hero {
+            input_map: input_map,
             color: col,
             topleft: tl,
             curr_velocity: na::zero(),
@@ -120,30 +135,29 @@ impl Update for Hero {
 
 impl GameInput for Hero {
     fn input(&mut self, iput: &Input) {
-        use piston::input::Button;
-        use piston::input::keyboard::Key;
-
-        match iput {
-            &Input::Press(Button::Keyboard(key)) => {
-                const VELOCITY_INCREMENT: f64 = 500.0;
-                if let Key::Up = key {
-                    self.curr_velocity[1] -= VELOCITY_INCREMENT;
-                }
-
-                if let Key::Down = key {
-                    self.curr_velocity[1] += VELOCITY_INCREMENT;
-                }
-
-                if let Key::Left = key {
-                    self.curr_velocity[0] -= VELOCITY_INCREMENT;
-                }
-
-                if let Key::Right = key {
-                    self.curr_velocity[0] += VELOCITY_INCREMENT;
-                }
-            },
-            &Input::Release(Button::Keyboard(_)) => { self.curr_velocity = na::zero(); },
-            _ => { }
+        if let Some(t) = self.input_map.translate(iput) {
+            match t {
+                Translated::Press(act) => {
+                    const VELOCITY_INCREMENT: f64 = 500.0;
+                    if let HeroAction::MoveUp = act {
+                        self.curr_velocity[1] -= VELOCITY_INCREMENT;
+                    }
+    
+                    if let HeroAction::MoveDown = act {
+                        self.curr_velocity[1] += VELOCITY_INCREMENT;
+                    }
+    
+                    if let HeroAction::MoveLeft = act {
+                        self.curr_velocity[0] -= VELOCITY_INCREMENT;
+                    }
+    
+                    if let HeroAction::MoveRight = act {
+                        self.curr_velocity[0] += VELOCITY_INCREMENT;
+                    }
+                },
+                Translated::Release(_) => { self.curr_velocity = na::zero(); },
+                _ => { }
+            }
         }
     }
 }
