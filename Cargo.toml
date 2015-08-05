@@ -20,7 +20,7 @@ debug-assertions = false
 
 [dependencies]
 simplecolor = {git = "https://github.com/burtonageo/simplecolor"}
-input_map   = {git = "https://github.com/burtonageo/input_map"}
+input_map   = {git = "https://github.com/burtonageo/input_map"} # <- Offending git line
 
 nalgebra = "0.2.20"
 piston = "0.5.0"
